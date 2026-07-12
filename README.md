@@ -41,12 +41,18 @@ your own build — and **prove it's better on a frozen evaluation set**.
 | 2 | 📚 RAG Engine | ≥100-review corpus + gold question set (authored *first*) · beat the naive retriever on recall@4 · refusal stress test · one measured retrieval upgrade | 25 |
 | 3 | 🧠 Fine-Tuned Analyst | ≥150 teacher-generated pairs with a full dataset card · QLoRA fine-tune · three-way eval · one training ablation | 25 |
 | 4 | 🚀 Ship It | quantization with a pre-committed quality gate · the assembled pipeline · serving economics · 10-product stress test | 25 |
-| 5 | 🎓 Final delivery | clean run-all · hidden-holdout scorecard (max 3 submissions) · ≤300-word reflection | — |
+| 5 | 🎓 Final delivery | clean run-all with the five-week metrics ledger · ≤300-word reflection | — |
 
 Every deliverable is labeled **D1.1 … D4.7** in the notebook, with a matching checklist in
-[`RUBRICS.md`](RUBRICS.md) — the full criteria, automatic deductions, and up to **+10 bonus
+[`RUBRICS.md`](RUBRICS.md) — the full criteria, automatic deductions, and up to **+7 bonus
 points** (deployed demo, GGUF actually served, second product category, DPO/distillation
 experiment).
+
+## Week 5 — final delivery
+
+One clean `Run all`, every `📊 EVALUATION` cell's output saved, `show_ledger()` displaying
+your five-week evidence trail, and a ≤300-word reflection: architecture trade-offs, the
+number you trust most and least, and what you'd build next.
 
 ## The rules
 
@@ -61,13 +67,6 @@ experiment).
    Analyst ≤1.5B and your shipped arm in 4-bit.
 5. **Honesty outscores numbers.** An honest 78% with clean methodology beats a suspicious
    95% — the rubric explicitly deducts for eval smells and pays for stated caveats.
-
-## Week 5 — the hidden holdout
-
-At the end, your pipeline runs against a **hidden test set you've never seen** — new images,
-new questions, new defect scenarios. A given builder cell assembles your submission from your
-own functions; you get a scorecard back. **Max 3 submissions** — treat the first as a smoke
-test, not a leaderboard grind. Robustness on unseen data is also worth bonus points.
 
 ## Files
 
