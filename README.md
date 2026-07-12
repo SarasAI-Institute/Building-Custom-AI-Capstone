@@ -1,66 +1,80 @@
-# 🏭 RiskLens — Multi-Modal Product-Risk Pipeline (Capstone)
+# 🏭 RiskLens — Your Capstone Project
 
-**The graded project of Build Custom AI** — **100 points, 25 per week, Satisfactory ≥ 70** —
-one notebook that grows for five weeks and ends as a working system: a VLM spots visual
-defects → RAG gathers evidence from reviews + specs → a fine-tuned, quantized Analyst SLM
-writes the root-cause risk report.
+**Build a multi-modal product-risk pipeline, one stage per week, and prove every stage with
+real numbers.** This is the graded project of *Build Custom AI* — worth **100 points
+(25 per week), Satisfactory ≥ 70**.
 
-This mirrors the 10xCoding/PromptLab format (inherit a partially-working project → fix its
-bugs → extend it weekly → final delivery), translated to notebooks: students inherit **working
-plumbing plus deliberately weak baselines**, and each week replace one stage's baseline with
-their own build — proving the improvement on a frozen set.
+```
+photo ──▶ STAGE 1 · VLM inspector ──▶ defect note (JSON)
+                                          │
+reviews+specs ──▶ STAGE 2 · RAG ──▶ evidence (cited)
+                                          │
+                              STAGE 3 · Analyst SLM (QLoRA)
+                                          │
+                              STAGE 4 · compressed + shipped
+                                          ▼
+                          root-cause risk report + eval appendix
+```
 
-## How it works
+## The premise
 
-1. **Week 1, students copy `capstone_starter.ipynb`** to Colab/Kaggle/their GPU box and submit
-   the **share link**. The link never changes — every week they improve the same notebook.
-2. The notebook is a real project skeleton:
-   - **`⚙️ GIVEN` infrastructure** — VLM plumbing (`ask_vlm`), embedding/index helpers,
-     format checker, benchmarker, data loaders, the metrics ledger (`record_metrics()` →
-     `capstone_metrics.json`). Boilerplate is provided; intelligence is the work.
-   - **Baselines to beat** — `inspect_v0` ships with 3 documented bugs (the PromptLab
-     "fix the backend bugs" move); `retrieve_v0` is a naive retriever — the rubric requires
-     the student's version to beat them measurably.
-   - **Lettered deliverables** (D1.1–D4.7) with per-week checklists that map 1:1 to the rubric.
-   - **Frozen-artifact cells above workspaces** (split / gold set / dataset card / gate) —
-     cell order is grading evidence.
-   - **`📊 EVALUATION` cell per stage** — computes the stage's metrics (F1 vs baseline, recall
-     tables, gate verdict) and logs them to the ledger. Grading is manual — the former
-     enforcement asserts remain as comments, documenting the rubric minimums (≥40 test images,
-     ≥20 gold questions, ≥150 teacher pairs, leakage ≤0.90…).
-3. **Grading:** each week from the submitted link with saved outputs — see [`RUBRICS.md`](RUBRICS.md):
-   25 pts/week in PromptLab style (criteria tables, automatic deductions, up to +10 bonus).
-4. **Week 5 (no new points, deductions if skipped):** run top-to-bottom, then the **hidden
-   holdout** — a `⚙️ GIVEN` builder cell assembles `predictions.json` from the student's own
-   contracts over the released `student_facing/` inputs (see `../course_setup/`), max 3
-   submissions to the scoring Space, scorecard pasted into the notebook.
+You've joined the (fictional) RiskLens team and inherited a **partially working pipeline**:
+the plumbing runs, but the intelligence is weak or missing. The baseline inspector ships with
+three planted bugs. The baseline retriever is naive. The Analyst doesn't exist yet.
+Each week, right after the live session teaches you the technique, you replace one stage with
+your own build — and **prove it's better on a frozen evaluation set**.
+
+## Getting started (Week 1, ~5 minutes)
+
+1. Open [`capstone_starter.ipynb`](capstone_starter.ipynb) → **save a copy** to your own
+   Colab/Kaggle/Drive. This copy is your project for the next five weeks.
+2. Set `TEAM` in the first cell. Switch the runtime to **GPU (T4)**.
+3. Read **Section 0** top to bottom — the given infrastructure is your standard library
+   *and* the code standard your own work is expected to match.
+4. Submit the **share link** (viewable, with saved outputs) — the same link, every week.
+
+## What you deliver each week
+
+| Week | Stage | Headline deliverables | Pts |
+|---|---|---|---|
+| 1 | 🔍 VLM Inspector | fix 3 planted bugs · beat the baseline on defect F1 on a frozen ≥40-image split · resolution-budget experiment | 25 |
+| 2 | 📚 RAG Engine | ≥100-review corpus + gold question set (authored *first*) · beat the naive retriever on recall@4 · refusal stress test · one measured retrieval upgrade | 25 |
+| 3 | 🧠 Fine-Tuned Analyst | ≥150 teacher-generated pairs with a full dataset card · QLoRA fine-tune · three-way eval · one training ablation | 25 |
+| 4 | 🚀 Ship It | quantization with a pre-committed quality gate · the assembled pipeline · serving economics · 10-product stress test | 25 |
+| 5 | 🎓 Final delivery | clean run-all · hidden-holdout scorecard (max 3 submissions) · ≤300-word reflection | — |
+
+Every deliverable is labeled **D1.1 … D4.7** in the notebook, with a matching checklist in
+[`RUBRICS.md`](RUBRICS.md) — the full criteria, automatic deductions, and up to **+10 bonus
+points** (deployed demo, GGUF actually served, second product category, DPO/distillation
+experiment).
+
+## The rules
+
+1. **Don't restructure the notebook.** Graders navigate by the section headers and `Dx.y`
+   labels. Fill the scaffolds; add cells below them freely; never edit `⚙️ GIVEN` cells.
+2. **Frozen means frozen.** Splits, gold sets, dataset cards and gate thresholds are authored
+   *above* your build work — cell order is your evidence you didn't peek.
+3. **Run all before submitting.** Grading is a manual review of your saved outputs — an
+   `📊 EVALUATION` cell with no output is a deliverable that didn't happen. Write your
+   training cell as *train-or-load* so run-all doesn't retrain.
+4. **Mind the memory budget (16 GB T4):** the VLM stays loaded all session — keep your
+   Analyst ≤1.5B and your shipped arm in 4-bit.
+5. **Honesty outscores numbers.** An honest 78% with clean methodology beats a suspicious
+   95% — the rubric explicitly deducts for eval smells and pays for stated caveats.
+
+## Week 5 — the hidden holdout
+
+At the end, your pipeline runs against a **hidden test set you've never seen** — new images,
+new questions, new defect scenarios. A given builder cell assembles your submission from your
+own functions; you get a scorecard back. **Max 3 submissions** — treat the first as a smoke
+test, not a leaderboard grind. Robustness on unseen data is also worth bonus points.
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `capstone_starter.ipynb` | the notebook students copy in Week 1 and grow all course |
-| `capstone_solution.ipynb` | **INSTRUCTOR ONLY — never publish.** Full reference implementation of D1.1–D4.7: the grading reference and the end-to-end system test |
-| `RUBRICS.md` | weekly 100-pt rubrics + final, with grader quick-procedure |
+| [`capstone_starter.ipynb`](capstone_starter.ipynb) | your project — copy it once, grow it for five weeks |
+| [`RUBRICS.md`](RUBRICS.md) | exactly how the 100 points are earned, week by week |
 
-## Why this design
-
-- **Inherit → fix → extend** — the PromptLab arc in notebook form: given plumbing, buggy
-  baselines to diagnose (Week 1's three inspector bugs), naive baselines to beat measurably
-  (Week 2's retriever), then build-from-scratch weeks (3–4) once the discipline is set.
-- **Contracts between stages** mean Week 2 can proceed even if Week 1 was weak (stages compose
-  through interfaces, not through each other's internals) — and the Week-5 holdout builder
-  runs against those same contracts unchanged.
-- **`record_metrics()` ledger** makes five weeks of eval history visible in one place —
-  regressions (e.g. after compression) become explainable rather than hidden.
-- **Cell-order-as-evidence + grading-cell asserts** let graders verify eval discipline and
-  minimums without re-running anything.
-- **Process over leaderboard**: the rubric pays for honest evaluation; the hidden holdout
-  catches overfitting anyway (disjoint vocabulary, unseen categories, max 3 submissions).
-
-## Instructor setup checklist
-
-- [ ] Host the holdout + scoring Space (`../course_setup/README.md`, Option A).
-- [ ] Share the `student_facing/` inputs at the start of Week 5 (not earlier).
-- [ ] Announce the submission form (notebook link + team name) in Week 1.
-- [ ] Remind students weekly: run all, save outputs, grading cells exactly once.
+*Questions? Bring them to the live session or the course forum. Good luck — build something
+you'd be proud to demo.* 🚀
