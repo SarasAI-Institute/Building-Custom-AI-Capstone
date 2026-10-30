@@ -1,79 +1,57 @@
-# 🏭 RiskLens — Your Capstone Project
+# RiskLens · Build Custom AI capstone
 
-**Build a multi-modal product-risk pipeline, one stage per week, and prove every stage with
-real numbers.** This is the graded project of *Build Custom AI* — worth **100 points
-(25 per week), Satisfactory ≥ 70**.
+Build a product-risk pipeline that inspects an image, retrieves supporting evidence and generates a report with a trained Analyst. Develop it across five module milestones, and support each claim with saved evidence.
 
-```
-photo ──▶ STAGE 1 · VLM inspector ──▶ defect note (JSON)
-                                          │
-reviews+specs ──▶ STAGE 2 · RAG ──▶ evidence (cited)
-                                          │
-                              STAGE 3 · Analyst SLM (QLoRA)
-                                          │
-                              STAGE 4 · compressed + shipped
-                                          ▼
-                          root-cause risk report + eval appendix
+[Open the starter in Colab](https://colab.research.google.com/github/SarasAI-Institute/Building-Custom-AI-Capstone/blob/codex/competency-colab-refresh/capstone_starter.ipynb) · [Competency rubric](RUBRICS.md) · [Setup](docs/COLAB.md) · [Submission checklist](docs/SUBMISSION.md) · [Practice labs](https://github.com/SarasAI-Institute/Building-Custom-AI-Main)
+
+```mermaid
+flowchart LR
+  Image --> Inspector
+  Inspector -->|GOOD| ShortCircuit[Return inspection]
+  Inspector -->|DEFECTIVE| Retrieval[Retrieve reviews and specifications]
+  Retrieval --> Analyst[Trained and evaluated Analyst]
+  Analyst --> Report[Structured report with evidence and uncertainty]
 ```
 
-## The premise
+## Start here
 
-You've joined the (fictional) RiskLens team and inherited a **partially working pipeline**:
-the plumbing runs, but the intelligence is weak or missing. The baseline inspector ships with
-three planted bugs. The baseline retriever is naive. The Analyst doesn't exist yet.
-Each week, right after the live session teaches you the technique, you replace one stage with
-your own build — and **prove it's better on a frozen evaluation set**.
+1. Save your own starter notebook copy. Use a Colab GPU runtime for the complete project; see the setup and validation limits below.
+2. Read Section 0 and the stable [contracts](docs/CONTRACTS.md). The three deliberate inspector defects remain part of the assignment.
+3. Freeze D1.1 before experimenting with prompts. Complete the labeled workspaces and add your evidence beneath them.
+4. Submit the same notebook link at each milestone, with saved outputs, a completion summary, known issues and a dated snapshot.
 
-## Getting started (Week 1, ~5 minutes)
+## What completion means
 
-1. Open [`capstone_starter.ipynb`](capstone_starter.ipynb) → **save a copy** to your own
-   Colab/Kaggle/Drive. This copy is your project for the next five weeks.
-2. Set `TEAM` in the first cell. Switch the runtime to **GPU (T4)**.
-3. Read **Section 0** top to bottom — the given infrastructure is your standard library
-   *and* the code standard your own work is expected to match.
-4. Submit the **share link** (viewable, with saved outputs) — the same link, every week.
+Every criterion is **Met** or **Not Yet**. Every criterion in a competency must be Met for that competency to be **Mastered**. All five competencies must be Mastered for the project to be Mastered. There are **24 required criteria**; metrics are evidence, not averaged grades.
 
-## What you deliver each week
-
-| Week | Stage | Headline deliverables | Pts |
+| Module | Build and demonstrate | Evidence | Review first |
 |---|---|---|---|
-| 1 | 🔍 VLM Inspector | fix 3 planted bugs · beat the baseline on defect F1 on a frozen ≥40-image split · resolution-budget experiment | 25 |
-| 2 | 📚 RAG Engine | ≥100-review corpus + gold question set (authored *first*) · beat the naive retriever on recall@4 · refusal stress test · one measured retrieval upgrade | 25 |
-| 3 | 🧠 Fine-Tuned Analyst | ≥150 teacher-generated pairs with a full dataset card · QLoRA fine-tune · three-way eval · one training ablation | 25 |
-| 4 | 🚀 Ship It | quantization with a pre-committed quality gate · the assembled pipeline · serving economics · 10-product stress test | 25 |
-| 5 | 🎓 Final delivery | clean run-all with the five-week metrics ledger · ≤300-word reflection | — |
+| 1 | Visual inspection and evaluation | D1.1–D1.7 / C1.1–C1.5 | C1.1 frozen split |
+| 2 | Grounded retrieval and generation | D2.1–D2.7 / C2.1–C2.5 | C2.3 grounded answers |
+| 3 | Model adaptation and evaluation | D3.1–D3.7 / C3.1–C3.5 | C3.2 evaluation separation |
+| 4 | Optimization and deployment decisions | D4.1–D4.4 / C4.1–C4.5 | C4.2 predeclared gate |
+| 5 | Integration, delivery and explanation | D4.5–D4.7 + final delivery / C5.1–C5.4 | C5.1 real integration |
 
-Every deliverable is labeled **D1.1 … D4.7** in the notebook, with a matching checklist in
-[`RUBRICS.md`](RUBRICS.md) — the full criteria, automatic deductions, and up to **+7 bonus
-points** (deployed demo, GGUF actually served, second product category, DPO/distillation
-experiment).
+Module 4 has its own quality/benchmark checkpoint. Module 5 adds integration and the combined Stage 4 evaluation. The legacy D4 labels remain stable so existing learner work is still navigable.
 
-## Week 5 — final delivery
+## Work responsibly with evidence
 
-One clean `Run all`, every `📊 EVALUATION` cell's output saved, `show_ledger()` displaying
-your five-week evidence trail, and a ≤300-word reflection: architecture trade-offs, the
-number you trust most and least, and what you'd build next.
+Use development data for decisions. A cell appearing above another does not prove chronology. Keep full outputs, manifests, actual model/data revisions, training logs and failed experiments. A format score or refusal phrase is not proof of factual correctness. The project is an educational product-risk prototype; a photograph does not establish an unseen physical cause.
 
-## The rules
+The inspector and retriever must improve their specified baseline metrics. The Analyst has no invented minimum win-rate. A failed compression experiment can demonstrate sound reasoning when reported honestly with a feasible fallback. Read the exact criterion before interpreting a number.
 
-1. **Don't restructure the notebook.** Graders navigate by the section headers and `Dx.y`
-   labels. Fill the scaffolds; add cells below them freely; never edit `⚙️ GIVEN` cells.
-2. **Frozen means frozen.** Splits, gold sets, dataset cards and gate thresholds are authored
-   *above* your build work — cell order is your evidence you didn't peek.
-3. **Run all before submitting.** Grading is a manual review of your saved outputs — an
-   `📊 EVALUATION` cell with no output is a deliverable that didn't happen. Write your
-   training cell as *train-or-load* so run-all doesn't retrain.
-4. **Mind the memory budget (16 GB T4):** the VLM stays loaded all session — keep your
-   Analyst ≤1.5B and your shipped arm in 4-bit.
-5. **Honesty outscores numbers.** An honest 78% with clean methodology beats a suspicious
-   95% — the rubric explicitly deducts for eval smells and pays for stated caveats.
+## Repository guide
 
-## Files
+- `capstone_starter.ipynb` — the one continuing learner project; explicit TODOs are intentional.
+- `RUBRICS.md`, `assessment/criteria.json` — readable and machine-readable versions of the same 24 criteria.
+- `assessment/reference/` — supplied official PDFs, unchanged and hashed.
+- `assessment/REVIEWER_GUIDE.md` — review order, feedback and calibration examples.
+- `docs/` — Colab setup, contracts, milestones, migration and validation record.
+- `risklens_support.py` — tested evidence/measurement helpers, also embedded in the standalone notebook.
+- `tests/`, `scripts/`, `.github/workflows/` — repeatable structural and CPU checks.
 
-| File | What it is |
-|---|---|
-| [`capstone_starter.ipynb`](capstone_starter.ipynb) | your project — copy it once, grow it for five weeks |
-| [`RUBRICS.md`](RUBRICS.md) | exactly how the 100 points are earned, week by week |
+## Validation
 
-*Questions? Bring them to the live session or the course forum. Good luck — build something
-you'd be proud to demo.* 🚀
+See [VALIDATION.md](docs/VALIDATION.md) for the exact tests run and GPU checks still required. CPU tests are not a claim that a full T4 training/compression run has passed. Colab hardware availability varies; preserve its matched PyTorch/CUDA stack and save artifacts beyond the temporary runtime.
+
+Optional hosting, graph frameworks and distillation do not replace required evidence. The full revision policy is in the rubric; administrative arrangements follow published course policy.
