@@ -1,0 +1,222 @@
+{
+  "version": "2.0",
+  "source": "RiskLens_Grading_Rubric.pdf",
+  "criteria": [
+    {
+      "id": "C1.1",
+      "module": 1,
+      "must_pass": true,
+      "title": "Your evaluation split is frozen",
+      "evidence": "D1.1 SPLIT cell; saved seed/counts; pre-iteration notebook snapshot or version history.",
+      "met": "Before prompt iteration, freeze at least 40 test images with at least 20 per class and a separate development set. Print seed, membership identifiers and class counts. Preserve a dated snapshot or version record. Use development data for choices and disclose any later test exposure.",
+      "common_mistakes": "Changing the split after seeing results; overlapping development and test images; treating cell position alone as proof of timing."
+    },
+    {
+      "id": "C1.2",
+      "module": 1,
+      "must_pass": false,
+      "title": "Your inspector fixes the inherited defects",
+      "evidence": "D1.2 bug diagnoses; D1.3 inspect(); representative outputs and fallback checks.",
+      "met": "Diagnose and fix the negation-unsafe parser, context-free prompt and empty defect description. Each diagnosis links a real symptom to its cause and fix. inspect() returns the required JSON fields and valid verdict, uses a domain prompt and structured output, and handles malformed model replies without an uncaught parsing error. Justify the VLM choice.",
+      "common_mistakes": "Leaving one bug unresolved; treating \"no defects\" as defective; returning empty defect evidence; a parser failure that crashes the pipeline."
+    },
+    {
+      "id": "C1.3",
+      "module": 1,
+      "must_pass": false,
+      "title": "Your prompt iteration is measured",
+      "evidence": "D1.3-D1.4 prompt ladder; saved development outputs.",
+      "met": "Compare at least three prompt iterations on the same development set, including a few-shot attempt. Keep every prompt, development accuracy, reason for the change and final selection visible. Include the few-shot token-cost observation. Select the final prompt before final-test scoring.",
+      "common_mistakes": "Only showing the winning prompt; unmeasured prompt changes; choosing a prompt from test-set results; omitting the few-shot attempt."
+    },
+    {
+      "id": "C1.4",
+      "module": 1,
+      "must_pass": false,
+      "title": "Your performance and error claims are supported",
+      "evidence": "D1.5 images and analysis; D1.6 saved Stage 1 evaluation and ledger.",
+      "met": "On the frozen test set, report baseline and final defect F1 and the confusion matrix; final F1 exceeds inspect_v0. Analyze at least three actual errors with plausible hypotheses. If fewer exist, analyze all errors and enough clearly labeled borderline cases to total three. Save the evaluation outputs and explain the baseline recall inflation.",
+      "common_mistakes": "Comparing different test sets; substituting accuracy or recall for defect F1; inventing errors; reporting numbers without saved outputs."
+    },
+    {
+      "id": "C1.5",
+      "module": 1,
+      "must_pass": false,
+      "title": "Your resource recommendation follows the evidence",
+      "evidence": "D1.6 timing/cost; D1.7 resolution table and recommendation.",
+      "met": "Measure development accuracy and seconds per image at three or more image sizes under stated hardware and settings. Record estimated cost per 1,000 inspections with the assumed hourly price. Recommend an image size based on the observed quality/time trade-off and explain what the processor actually does with the resized inputs.",
+      "common_mistakes": "Only reporting memory; comparing different image sets; claiming higher input resolution always helps; omitting price or runtime assumptions."
+    },
+    {
+      "id": "C2.1",
+      "module": 2,
+      "must_pass": false,
+      "title": "Your corpus and gold questions are valid",
+      "evidence": "D2.1 CORPUS; D2.2 GOLD; source provenance and frozen snapshot.",
+      "met": "Include at least 100 real reviews, all four official documents verbatim with their IDs, and at least two authored documents containing testable facts and a cross-document link. Before indexing, freeze at least 20 corpus-based gold questions, including three multi-hop cases, with required source IDs and reference answers. Preserve the version record.",
+      "common_mistakes": "Invented reviews presented as real; altered official facts; gold questions chosen after retrieval trials; multi-hop labels on single-source questions."
+    },
+    {
+      "id": "C2.2",
+      "module": 2,
+      "must_pass": false,
+      "title": "Your retriever improves under a fair comparison",
+      "evidence": "D2.3 retrieve(); D2.6 evaluation; D2.7 upgrade experiment.",
+      "met": "Beat retrieve_v0 on recall@4 using the same corpus, frozen gold questions and metric implementation. Save baseline/final recall at k = 1, 2, 4 and 8. Measure one upgrade beyond the query prefix on unchanged questions, show before/after results, and justify adopting or rejecting it. A rejected upgrade is valid evidence.",
+      "common_mistakes": "Changing the gold set or corpus between arms; claiming recall@8 beats baseline recall@4; reporting only the prefix fix; omitting a negative experiment."
+    },
+    {
+      "id": "C2.3",
+      "module": 2,
+      "must_pass": true,
+      "title": "Your answers are grounded and refuse unsupported claims",
+      "evidence": "D2.4 rag_answer(); answer/hit pairs; five-question adversarial set and saved responses.",
+      "met": "Return the answer and the actual retrieved hits. Citations resolve to those source IDs and support the associated claims. Preselect five genuinely unanswerable questions; at least four receive a refusal containing a REFUSAL_PHRASES phrase without an invented answer. Report all five outcomes; separately report any additional adversarial cases.",
+      "common_mistakes": "Decorative or nonexistent citations; refusing and then inventing an answer; changing adversarial questions after seeing failures; counting a phrase match as sufficient proof."
+    },
+    {
+      "id": "C2.4",
+      "module": 2,
+      "must_pass": false,
+      "title": "Your generation evaluation measures both axes",
+      "evidence": "D2.5 scoring outputs; D2.6 evaluation and ledger; judge protocol.",
+      "met": "Score faithfulness and answer relevance separately over the frozen gold set. State the judge or evaluation tool, scoring instructions, sample size and aggregation, and preserve representative answer-level results. Explain judge bias, especially shared generator/judge weights. Save the Stage 2 outputs and ledger; reference-substring matches alone do not establish faithfulness.",
+      "common_mistakes": "Only measuring retrieval; using answer-substring matches as a faithfulness score; unnamed judge; no caveat about self-evaluation or judgment limits."
+    },
+    {
+      "id": "C2.5",
+      "module": 2,
+      "must_pass": false,
+      "title": "Your retrieval design choice is justified",
+      "evidence": "Design note beside D2.7; one question and its linked source IDs.",
+      "met": "Trace a question requiring linked facts across documents. Explain whether graph-assisted retrieval would help and identify its extraction, indexing and maintenance costs. Distinguish the notebook graph-hop illustration from full GraphRAG and KAG systems. Justify the retrieval approach used in RiskLens; implementing a complete graph framework is not required.",
+      "common_mistakes": "Calling any vector index GraphRAG; presenting a toy graph as a complete KAG system; claiming graphs improve every query; no concrete linked question."
+    },
+    {
+      "id": "C3.1",
+      "module": 3,
+      "must_pass": false,
+      "title": "Your training data is real and curated",
+      "evidence": "D3.1 teacher calls and examples; D3.2 DATASET_CARD and cleaning counts.",
+      "met": "Generate at least 150 raw pairs with a named real teacher model and varied inputs using make_input(). Document the generation strategy. Perform deduplication and train/test decontamination, printing before/after and removal counts. Complete every dataset-card field and report retained training size. Template-only generated reports do not meet the requirement.",
+      "common_mistakes": "Using the practice template as teacher output; claiming 150 retained examples when only raw count was measured; describing cleaning without running it; incomplete card."
+    },
+    {
+      "id": "C3.2",
+      "module": 3,
+      "must_pass": true,
+      "title": "Your evaluation data is separated from training",
+      "evidence": "D3.3 analyst_test_rows; similarity calculation; dataset-card snapshot before training.",
+      "met": "Freeze at least 25 Analyst test rows before training. Drop contaminated training rows and show the maximum train-to-test cosine similarity is at most 0.90 using a declared embedding model and method. Preserve the frozen version and counts. Explain that the similarity screen is a leakage heuristic, not proof of independence.",
+      "common_mistakes": "Training on evaluation examples; removing inconvenient test rows; reporting the mean instead of maximum similarity; using cell order as the only chronology evidence."
+    },
+    {
+      "id": "C3.3",
+      "module": 3,
+      "must_pass": false,
+      "title": "Your QLoRA adapter is trained and reloadable",
+      "evidence": "D3.4 training configuration, loss outputs, adapter artifact and reload demonstration.",
+      "met": "Complete QLoRA training with a configuration appropriate to the runtime. Preserve base model ID/revision, adapter settings and training parameters, and interpret the observed loss. Save the learner-trained adapter to an accessible path or Hub location and demonstrate loading it. The delivery path loads saved weights instead of retraining on every Run all.",
+      "common_mistakes": "A configuration with no completed training; an adapter path that is inaccessible; loading only the base; no loss interpretation; retraining unexpectedly during delivery."
+    },
+    {
+      "id": "C3.4",
+      "module": 3,
+      "must_pass": false,
+      "title": "Your base and tuned comparison is valid",
+      "evidence": "D3.5 generations and judgments; D3.6 WEEK3_RESULTS, Stage 3 output and ledger.",
+      "met": "Evaluate genuinely untuned base and tuned outputs on the same frozen rows using format adherence, content rubric scores and blind randomized A/B judgments. Name a separate, stronger judge and state its limitations. Show wins, losses, ties and denominator. Populate WEEK3_RESULTS from saved evidence. No minimum win-rate or tuning-improvement margin is imposed.",
+      "common_mistakes": "The base still has an active adapter; fixed A/B position; a percentage without counts; judge equals generator without disclosure; scores copied without supporting outputs."
+    },
+    {
+      "id": "C3.5",
+      "module": 3,
+      "must_pass": false,
+      "title": "Your ablation supports a defensible conclusion",
+      "evidence": "D3.7 two adapter runs, configuration difference, comparison and conclusion.",
+      "met": "Change exactly one training variable: rank, epochs, learning rate or training-data size. Train a second adapter and compare both runs on the same frozen rows with the same evaluation protocol. Preserve both results. Explain what changed, whether tuning is justified, a specific expected out-of-distribution failure and the limits of using the frozen set for repeated comparisons.",
+      "common_mistakes": "Multiple variables changed; no retraining; comparing different evaluation rows; hiding worse results; generic claims about generalization without a concrete failure case."
+    },
+    {
+      "id": "C4.1",
+      "module": 4,
+      "must_pass": false,
+      "title": "Your optimization choice shows understanding",
+      "evidence": "Technique note beside D4.1-D4.2; links to the selected model configurations.",
+      "met": "Distinguish data from model parallelism, training from inference optimization, teacher-output from logit distillation, adapter folding from multi-model merging, and reduced-precision quantization. Identify the RiskLens bottleneck and justify the chosen route and trade-offs. Independent multi-GPU training, distillation and multi-parent merging are optional extensions, not required implementations.",
+      "common_mistakes": "Calling device placement data-parallel training; confusing adapter folding with merging several fine-tunes; claiming compression always accelerates inference; listing terms without a choice."
+    },
+    {
+      "id": "C4.2",
+      "module": 4,
+      "must_pass": true,
+      "title": "Your quality gate precedes the comparison",
+      "evidence": "D4.1 GATE and pre-score snapshot/version; baseline and candidate inventory.",
+      "met": "Before compressed-model re-scoring, record justified maximum format and content drops, their units, the Stage 3 reference, candidate arms, hourly price and intended ship arm. Preserve the dated version; keep thresholds unchanged for that comparison. Explain why the tolerances are acceptable for the stated use case rather than choosing them to guarantee a pass.",
+      "common_mistakes": "Setting thresholds after seeing results; confusing percent with percentage points; changing the intended arm without a separate decision record; unjustified permissive tolerances."
+    },
+    {
+      "id": "C4.3",
+      "module": 4,
+      "must_pass": false,
+      "title": "Your compression comparison uses the trained Analyst",
+      "evidence": "D4.2 memory table; D4.3 saved generations, quality table and Module 4 checkpoint.",
+      "met": "Produce at least two compression arms of the learner-trained Analyst and record memory footprints and ratios against half precision. Re-score each arm and the Stage 3 reference on the same frozen rows for format and content, with consistent settings. Show threshold comparisons and every verdict. Identify content cosine similarity as a proxy, not factual correctness.",
+      "common_mistakes": "Quantizing an untuned base; counting a configuration as a measured arm; measuring format only; different rows per arm; presenting cosine similarity as a factuality guarantee."
+    },
+    {
+      "id": "C4.4",
+      "module": 4,
+      "must_pass": false,
+      "title": "Your serving estimates are measured and qualified",
+      "evidence": "D4.4 benchmark outputs for reference and each arm; settings and cost calculation.",
+      "met": "Report p50/p95 latency, actual generated-token throughput and estimated cost per 1,000 reports for the reference and each arm. State hardware, run count, warm-up, input/output lengths and hourly-price/utilization assumptions. Label small-sample percentiles and cost estimates appropriately; explain why lower precision may save memory without reducing latency.",
+      "common_mistakes": "Using max_new_tokens as generated length; comparing unequal workloads without disclosure; calling notebook p95 a production SLA; treating the assumed GPU price as a verified bill."
+    },
+    {
+      "id": "C4.5",
+      "module": 4,
+      "must_pass": false,
+      "title": "Your deployment decision respects the gate",
+      "evidence": "D4.3 decision note; accepted/rejected arm inventory; fallback and limits.",
+      "met": "Select a candidate that passes the declared gate or reject failed candidates and document a feasible fallback. Link the decision to quality, memory and runtime evidence. An honestly evaluated failed compression can meet this competency; it cannot be labeled production-ready. Keep the original gate record and distinguish any later candidate or fallback evaluation.",
+      "common_mistakes": "Declaring ship after a failed gate; hiding a quality drop behind a smaller file; silently changing the model; rewriting the threshold to make a candidate pass."
+    },
+    {
+      "id": "C5.1",
+      "module": 5,
+      "must_pass": true,
+      "title": "Your real components work together",
+      "evidence": "D4.5 analyze_product(); three saved product demonstrations; selected Analyst record.",
+      "met": "Compose the learner inspector, retriever and selected Analyst through the published contracts. Preserve the GOOD short-circuit and return note, evidence and report. Save at least three product demonstrations: one good and two defective, with traceable inputs and outputs. Use real components, not hard-coded substitutes. Label any fallback or failed-gate demonstration and its limits.",
+      "common_mistakes": "Demo stubs standing in for components; a JSON note passed where training used prose; missing good-product behavior; reports with no traceable evidence; a rejected model labeled ready."
+    },
+    {
+      "id": "C5.2",
+      "module": 5,
+      "must_pass": false,
+      "title": "Your system evaluation locates failures",
+      "evidence": "D4.7 batch outputs; timing table; product-level failure taxonomy.",
+      "met": "Run the full pipeline on at least ten products and save end-to-end p50/p95 plus inspector, retrieval and Analyst timing. For every wrong or weak report, identify the responsible stage and evidence for that diagnosis; explicitly report if none are observed. Explain what the small workload cannot establish about production reliability or generalization.",
+      "common_mistakes": "Benchmarking only the Analyst; no stage timing; vague failure categories; silently skipping failures; claiming a small batch establishes production reliability."
+    },
+    {
+      "id": "C5.3",
+      "module": 5,
+      "must_pass": false,
+      "title": "Your delivery is reproducible and documented",
+      "evidence": "D4.6 deployment note; final run/load and show_ledger(); artifacts, environment and reflection.",
+      "met": "Provide a clean top-to-bottom run/load with saved evaluation outputs, accessible model/data artifacts and environment/configuration details. Display the complete metrics ledger and preserve earlier comparisons separately. Document runtime choice, the bottleneck at 100 times traffic and a monitoring signal. Include a reflection of at most 300 words on trade-offs, trusted/uncertain numbers and next steps.",
+      "common_mistakes": "Missing weights or data; a notebook that depends on hidden state; outputs cleared; assuming overwritten ledger entries preserve all experiments; deployment claims without a runnable route."
+    },
+    {
+      "id": "C5.4",
+      "module": 5,
+      "must_pass": false,
+      "title": "You can explain the submitted system",
+      "evidence": "Explanation cells in final notebook; traceable code/outputs; exam evidence if separately issued.",
+      "met": "Explain what one actual component does, why its design fits RiskLens and what would break if a named part were removed. Trace one demonstrated product through the applicable stages. Defend one reported metric and discuss a failed experiment or unsupported claim using saved evidence. Submit a written walkthrough; separately issued exam evidence may replace equivalent parts.",
+      "common_mistakes": "Reading code without explaining behavior; a generic architecture unrelated to the notebook; no supporting measurement; avoiding a failure or limitation; substituting polish for understanding."
+    }
+  ]
+}
